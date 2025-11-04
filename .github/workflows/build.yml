@@ -1,0 +1,29 @@
+name: Java CI
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Compile
+        run: |
+          mkdir -p bin
+          javac -d bin src/*.java
+
+      - name: Run tests
+        run: |
+          java --class-path bin CalculatorTest
