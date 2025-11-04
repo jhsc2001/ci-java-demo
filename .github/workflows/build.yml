@@ -1,29 +1,56 @@
-name: Java CI
+name: Java CI Pipeline
 
+# Wann die Pipeline laufen soll
 on:
   push:
-    branches: [ "**" ]
+    branches: ["**"]
   pull_request:
 
 jobs:
-  build-test:
+  build_and_test:
     runs-on: ubuntu-latest
 
+    # --------------------------
+    # "image" – Laufzeitumgebung
+    # --------------------------
+    container:
+      image: eclipse-temurin:21-jdk   # Java 21, modern & stabil
+
+    # --------------------------
+    # "variables" – Verzeichnisse
+    # --------------------------
+    env:
+      SRC_DIR: "src"
+      BIN_DIR: "bin"
+
+    # --------------------------
+    # Schritte ("stages")
+    # --------------------------
     steps:
-      - name: Checkout repository
+      # Code aus dem Repository holen
+      - name: Quellcode abrufen
         uses: actions/checkout@v4
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
+      # Ordner für kompilierte Dateien vorbereiten
+      - name: Vorbereitung
+        run: mkdir -p $BIN_DIR
+
+      # Kompiliere alle Java-Dateien
+      - name: Kompiliere Java-Dateien
+        run: |
+          echo "Kompiliere Java-Dateien..."
+          javac -d $BIN_DIR $SRC_DIR/*.java
+
+      # Testlauf starten (führt CalculatorTest aus)
+      - name: Testlauf ausführen
+        run: |
+          echo "Starte Testlauf..."
+          java --class-path $BIN_DIR CalculatorTest
+
+      # (Optional) Artefakte speichern, um die kompilierten Dateien im GitHub-Log zu behalten
+      - name: Artefakte hochladen
+        if: success()
+        uses: actions/upload-artifact@v4
         with:
-          distribution: temurin
-          java-version: "21"
-
-      - name: Compile
-        run: |
-          mkdir -p bin
-          javac -d bin src/*.java
-
-      - name: Run tests
-        run: |
-          java --class-path bin CalculatorTest
+          name: java-bin
+          path: ${{ env.BIN_DIR }}
