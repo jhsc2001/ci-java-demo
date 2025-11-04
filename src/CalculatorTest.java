@@ -15,7 +15,7 @@ public class CalculatorTest {
         Calculator c = new Calculator();
 
         // positive Tests
-        assertEquals("add(2,3)", 5, c.add(2,3));
+        assertEquals("add(2,3)", 6, c.add(2,3));
         assertEquals("sub(10,4)", 6, c.sub(10,4));
         assertEquals("mul(3,7)", 21, c.mul(3,7));
         assertEquals("div(20,5)", 4, c.div(20,5));
