@@ -50,7 +50,7 @@ public class CalculatorTest {
         System.out.println("Starte Testläufe für Calculator...\n");
 
         // --- Addition ---
-        assertEquals("add(2, 3)", 6, Calculator.add(2, 3));
+        assertEquals("add(2, 3)", 5, Calculator.add(2, 3));
         assertEquals("add(-4, 7)", 3, Calculator.add(-4, 7));
 
         // --- Subtraktion ---
