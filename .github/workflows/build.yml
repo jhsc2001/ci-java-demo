@@ -1,22 +1,32 @@
+# Name der Pipeline (steht auf GitHub oben drüber)
 name: Java CI
 
+# Pipeline startet automatisch, wenn ich was pushe
 on: push
 
 jobs:
   build:
+    # GitHub nutzt eine frische Linux-Umgebung
     runs-on: ubuntu-latest
 
     steps:
+      # Holt meinen Code aus dem Repo, damit er in der VM verfügbar ist
       - uses: actions/checkout@v4
 
+      # Installiert Java 21 (Temurin = OpenJDK)
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
 
+      # Kompiliert alle .java-Dateien aus src/
+      # -d bin: legt den Ordner "bin" an und speichert dort die .class-Dateien
       - name: Compile
         run: javac -d bin src/*.java
 
+      # Führt meine Testklasse aus
+      # --class-path bin: sagt, wo die kompilierten Dateien liegen
+      # Wenn ein Test fehlschlägt -> Build wird rot
       - name: Run Tests
         run: java --class-path bin CalculatorTest
