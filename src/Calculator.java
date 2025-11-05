@@ -61,5 +61,5 @@ public class Calculator {
             throw new IllegalArgumentException("Division durch 0 ist nicht erlaubt.");
         }
         return a / b;
-    }
+    } 
 }
